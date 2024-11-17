@@ -1,33 +1,6 @@
-# Tasks
-
-## Frontend
-- [ ] Split Home.java into smaller files (Hiếu & Bảo)
-  - Split files first
-  - Discuss UI changes later in meeting
-
-## AI Features
-- [ ] Chat functionality (Lâm)
-  - Movie recommendations
-  - Ticket booking via chat
-  - Comment sentiment analysis
-  - Using FASTAPI & Langchain
-
-## Backend APIs
-- [ ] Email APIs (Hùng)
-  - [x] Payment API
-  - [x] Ticket email API  
-  - [ ] Registration confirmation email
-
-## Database
-- [ ] MongoDB setup (Hùng)
-  - Movie data management
-  - Showtimes
-  - Movie details (title, description, images, etc)
-
-## Admin Panel
-- [ ] Admin features - if time permits (Hùng)
-  - Movie management
-  - Booking history for all users
-
-## Documentation
-- [ ] Final report - due Dec 31 (Team)
+1. Chia Home.java thành file nhỏ ( chia nhỏ ra trước => sửa giao diện thì meet sau ) ( Hiếu với Bảo)
+2. AI -> chat( gợi ý phim, 'đặt vé qua chat', ""phân tích bình luận tích cực hay tiêu cực"", .....) ( FASTAPI, Langchain ) (Lâm)
+3. API Gửi mail đăng kí thành công (sắp làm), api thanh toán ( xong ), api gửi mail vé ( xong ) (Hùng)
+4. =>> DB: MongoDB => data phim ( giờ rạp có phim gì thì lấy) ( tên, mô tả, ảnh, .. ) (Hùng )
+5. Admin ( xong sớm thì làm) ( quản lí thêm phim, xem lịch sử đặt vé ( chung tất cả người dùng ) ) (Hùng) 
+6. Báo cáo ( sau cùng 31/12 viết) (chung)
