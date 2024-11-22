@@ -6,14 +6,24 @@
 6. Báo cáo ( sau cùng 31/12 viết) (chung)
 
 Tên phim:
+
 Rạp chiếu:
+
 thời gian chiếu:
+
 		giờ
 		ngày
+  
 thể loại
+
 đường dẫn ảnh
+
 đạo diễn
+
 mô tả: 
+
 thời lượng 
+
 ngày khởi chiếu
+
 diễn viên chính
