@@ -8,6 +8,8 @@ package com.mycompany.database;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.*;
 public class Main {
     public static void showImage(BufferedImage image) {
@@ -31,11 +33,20 @@ public class Main {
             System.err.println("No image to display");
         }
     }
+
     public static void main(String[] args) {
-        // MovieDatabase movieDb = new MovieDatabase();
-        // movieDb.addMovie("Inception", "Sci-Fi", 148, "2010-07-16", "Available");
-        // movieDb.updateMovie("Inception", "Science Fiction", 148, "2010-07-16", "Available");
-        // //movieDb.deleteMovie("Inception");
+
+
+        
+        MovieDatabase movieDb = new MovieDatabase();
+        movieDb.addMovie("1", "Inception", Arrays.asList("Cinema 1", "Cinema 2"), Arrays.asList("2023-10-01", "2023-10-02"), "Sci-Fi", "path/to/image", "Christopher Nolan", "A mind-bending thriller", 148, "2010-07-16", "Leonardo DiCaprio, Joseph Gordon-Levitt");
+        movieDb.updateMovie("1", "Inception", Arrays.asList("Cinema 1", "Cinema 2", "Cinema 3"), Arrays.asList("2023-10-01", "2023-10-02", "2023-10-03"), "Sci-Fi", "path/to/image", "Christopher Nolan", "A mind-bending thriller", 148, "2010-07-16", "Leonardo DiCaprio, Joseph Gordon-Levitt");
+        movieDb.deleteMovie("1");
+        List<Movie> movies = movieDb.getAllMovies();
+        for (Movie movie : movies) {
+            System.out.println(movie.getTitle());
+        }
+
 
         // AccountManager accountManager = new AccountManager();
         // accountManager.createAccount("dmhung1508", "hung1234", "admin@hacker2k4.com");
@@ -52,6 +63,16 @@ public class Main {
         // BufferedImage image = Utils.getQR(10000, "dmhung1508");
         // showImage(image);
 
+        // SeatsDatabase seatsDb = new SeatsDatabase();
+        // seatsDb.addSeats("Cinema 1");
+        // seatsDb.updateSeatStatus("Cinema 1", "G01");
+        // seatsDb.updateSeatStatus("Cinema 1", "G02");
+        // seatsDb.updateSeatStatus("Cinema 1", "G03");
+        // seatsDb.updateSeatStatus("Cinema 1", "G04");
+
+        // for (Seats seat : seatsDb.getSeats("Cinema 1")) {
+        //     System.out.println(seat.getSeat() + " - " + seat.getStatus());
+        // }
 
         
     }

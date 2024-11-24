@@ -5,7 +5,7 @@ import java.util.List;
 public class Movie {
     private String id;
     private String title;
-    private List<Cinema> cinemas;
+    private List<String> cinemas;
     private List<String> showDates;
     private String genre;
     private String imagePath;
@@ -15,7 +15,7 @@ public class Movie {
     private String releaseDate;
     private String mainActors;
 
-    public Movie(String id, String title, List<Cinema> cinemas, List<String> showDates, String genre, String imagePath, String director, String description, int duration, String releaseDate, String mainActors) {
+    public Movie(String id, String title, List<String> cinemas, List<String> showDates, String genre, String imagePath, String director, String description, int duration, String releaseDate, String mainActors) {
         this.id = id;
         this.title = title;
         this.cinemas = cinemas;
@@ -29,15 +29,92 @@ public class Movie {
         this.mainActors = mainActors;
     }
 
-    public String getId() { return id; }
-    public String getTitle() { return title; }
-    public List<Cinema> getCinemas() { return cinemas; }
-    public List<String> getShowDates() { return showDates; }
-    public String getGenre() { return genre; }
-    public String getImagePath() { return imagePath; }
-    public String getDirector() { return director; }
-    public String getDescription() { return description; }
-    public int getDuration() { return duration; }
-    public String getReleaseDate() { return releaseDate; }
-    public String getMainActors() { return mainActors; }
+    // Getters and setters for each field
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<String> getCinemas() {
+        return cinemas;
+    }
+
+    public void setCinemas(List<String> cinemas) {
+        this.cinemas = cinemas;
+    }
+
+    public List<String> getShowDates() {
+        return showDates;
+    }
+
+    public void setShowDates(List<String> showDates) {
+        this.showDates = showDates;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getMainActors() {
+        return mainActors;
+    }
+
+    public void setMainActors(String mainActors) {
+        this.mainActors = mainActors;
+    }
 }

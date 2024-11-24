@@ -15,40 +15,38 @@ public class MovieDatabase {
         collection = database.getCollection("movies");
     }
 
-    public void addMovie(String title, String cinema, String showTime, String showHour, String showDate, String genre, String imagePath, String director, String description, int duration, String releaseDate, String mainActors) {
-        Document movie = new Document("title", title)
-                            .append("cinema", cinema)
-                            .append("showTime", showTime)
-                            .append("showHour", showHour)
-                            .append("showDate", showDate)
-                            .append("genre", genre)
-                            .append("imagePath", imagePath)
-                            .append("director", director)
-                            .append("description", description)
-                            .append("duration", duration)
-                            .append("releaseDate", releaseDate)
-                            .append("mainActors", mainActors);
+    public void addMovie(String id, String title, List<String> cinemas, List<String> showDates, String genre, String imagePath, String director, String description, int duration, String releaseDate, String mainActors) {
+        Document movie = new Document("id", id)
+                    .append("title", title)
+                    .append("cinemas", cinemas)
+                    .append("showDates", showDates)
+                    .append("genre", genre)
+                    .append("imagePath", imagePath)
+                    .append("director", director)
+                    .append("description", description)
+                    .append("duration", duration)
+                    .append("releaseDate", releaseDate)
+                    .append("mainActors", mainActors);
         collection.insertOne(movie);
     }
 
-    public void updateMovie(String title, String newCinema, String newShowTime, String newShowHour, String newShowDate, String newGenre, String newImagePath, String newDirector, String newDescription, int newDuration, String newReleaseDate, String newMainActors) {
-        Document query = new Document("title", title);
-        Document update = new Document("$set", new Document("cinema", newCinema)
-                                                .append("showTime", newShowTime)
-                                                .append("showHour", newShowHour)
-                                                .append("showDate", newShowDate)
-                                                .append("genre", newGenre)
-                                                .append("imagePath", newImagePath)
-                                                .append("director", newDirector)
-                                                .append("description", newDescription)
-                                                .append("duration", newDuration)
-                                                .append("releaseDate", newReleaseDate)
-                                                .append("mainActors", newMainActors));
+    public void updateMovie(String id, String newTitle, List<String> newCinemas, List<String> newShowDates, String newGenre, String newImagePath, String newDirector, String newDescription, int newDuration, String newReleaseDate, String newMainActors) {
+        Document query = new Document("id", id);
+        Document update = new Document("$set", new Document("title", newTitle)
+                            .append("cinemas", newCinemas)
+                            .append("showDates", newShowDates)
+                            .append("genre", newGenre)
+                            .append("imagePath", newImagePath)
+                            .append("director", newDirector)
+                            .append("description", newDescription)
+                            .append("duration", newDuration)
+                            .append("releaseDate", newReleaseDate)
+                            .append("mainActors", newMainActors));
         collection.updateOne(query, update);
     }
 
-    public void deleteMovie(String title) {
-        Document query = new Document("title", title);
+    public void deleteMovie(String id) {
+        Document query = new Document("id", id);
         collection.deleteOne(query);
     }
 
@@ -58,11 +56,10 @@ public class MovieDatabase {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
                 Movie movie = new Movie(
+                    doc.getString("id"),
                     doc.getString("title"),
-                    doc.getString("cinema"),
-                    doc.getString("showTime"),
-                    doc.getString("showHour"),
-                    doc.getString("showDate"),
+                    (List<String>) doc.get("cinemas"),
+                    (List<String>) doc.get("showDates"),
                     doc.getString("genre"),
                     doc.getString("imagePath"),
                     doc.getString("director"),
