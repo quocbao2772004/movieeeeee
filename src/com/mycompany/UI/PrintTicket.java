@@ -178,12 +178,13 @@ public class PrintTicket extends JPanel
             public void actionPerformed(ActionEvent e) 
             {
                 
-//                if(utils.checkTicketExists(idTicket))
+                if(utils.checkTicketExists(idTicket))
                 {
                     System.out.println(idTicket);
                     JOptionPane.showMessageDialog(myFrame, "Successful payment");
                     AccountManager am = new AccountManager();
                     utils.sendEmail(usrn, moviee.getTitle(), Receipt.save_choosen_day.get(0), Receipt.save_choosen_time.get(0), seats, am.getEmailByUsername(usrn));
+                    System.out.println(am.getEmailByUsername(usrn));
                     SeatsDatabase sdtb = new SeatsDatabase();
                     SeatUI seat = new SeatUI();
                     String seatname = seat.getSeatName(moviee.getTitle());
@@ -194,14 +195,20 @@ public class PrintTicket extends JPanel
                         System.out.println("i = " + i);
                         sdtb.updateSeatStatus(seatname, i);
                     }
+                    Menu mn = new Menu();
+                    try {
+                        mn.show_Menu(usrn);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PrintTicket.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 }
-//                else
-//                {
-//                    System.out.println(idTicket);
-//                    JOptionPane.showMessageDialog(myFrame, "You haven't paid successfully");
-//
-//                }
+                else
+                {
+                    System.out.println(idTicket);
+                    JOptionPane.showMessageDialog(myFrame, "You haven't paid successfully");
+
+                }
             }
             
         });

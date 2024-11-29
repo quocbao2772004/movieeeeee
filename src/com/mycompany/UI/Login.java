@@ -2,7 +2,7 @@ package com.mycompany.UI;
 
 import com.mycompany.movie.*;
 import com.mycompany.database.*;
-import javax.swing.*;
+import javax.swing.*; 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +15,7 @@ public class Login {
     private JFrame myFrame;
     private JTextField textUsername;
     private JPasswordField textPassword;
-
+    private AccountManager accountManager = new AccountManager();
     public Login() 
     {
         this.myFrame = new JFrame("Movie Ticket System");
@@ -135,7 +135,7 @@ public class Login {
             String username = textUsername.getText();
             String password = new String(textPassword.getPassword());
 
-            AccountManager accountManager = new AccountManager();
+            
             try {
                 if (accountManager.check_correct(username, password)) 
                 {

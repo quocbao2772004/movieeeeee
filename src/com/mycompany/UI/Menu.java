@@ -16,7 +16,7 @@ public class Menu
 {
 
     private JFrame myFrame;
-
+    private process_functions pf = new process_functions();
     public Menu() 
     {
         
@@ -57,7 +57,7 @@ public class Menu
         userInfoPanel.setLayout(null);
         userInfoPanel.setBounds(0, 30, 150, 200);
         userInfoPanel.setBackground(Color.decode("#CCCCCC"));
-        process_functions pf = new process_functions();
+        
         userInfoPanel.add(pf.processing_image("images//user.png", 10, 0, 120, 120));
 
         JLabel usernameLabel = new JLabel(username);
@@ -153,7 +153,6 @@ public class Menu
             int row = i / 3;
             int x = xOffset + col * (movieWidth + gapX);
             int y = yOffset + row * (movieHeight + gapY);
-            process_functions pf = new process_functions();
             movieListPanel.add(pf.processing_image_from_url(movie.getImagePath(), x, y, movieWidth, movieHeight - 50));
             movieListPanel.add(pf.processing_label(movie.getTitle(), x, y + movieHeight - 40, movieWidth + gapX / 2, 30));
             JButton detailsButton = new JButton("More details");

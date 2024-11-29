@@ -14,6 +14,8 @@ import static com.mycompany.UI.process_functions.*;
 public class RegisterPage 
 {
     private JFrame myFrame;
+    private AccountManager am = new AccountManager();
+    private process_functions pf = new process_functions();
     public JPanel Design_leftPanel()
     {
         JPanel leftPanel = new JPanel();
@@ -75,13 +77,13 @@ public class RegisterPage
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                process_functions pf = new process_functions();
-                Account new_account = new Account(text_username.getText(), text_email.getText(), text_Password.getText());
+                
+                Account new_account = new Account(text_username.getText(),text_Password.getText() ,text_email.getText() );
                 if(pf.check_is_valid(new_account.getUsername())
                         && pf.check_is_valid(new_account.getEmail())
                         && pf.check_is_valid(new_account.getPassword()))
                 {
-                    AccountManager am = new AccountManager();
+                    
                     if(!am.check_exit(new_account.getUsername()))
                     {
                         am.createAccount(new_account.getUsername(), new_account.getPassword(), new_account.getEmail());
