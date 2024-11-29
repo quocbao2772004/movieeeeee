@@ -5,10 +5,15 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.bson.Document;
 
@@ -28,7 +33,7 @@ public class AdminPanel extends JFrame {
     private JTable movieTable, transactionTable, accountTable, cinemaTable, feedbackTable;
     private JTabbedPane tabbedPane;
 
-    public AdminPanel() {
+    public AdminPanel() throws MalformedURLException {
         initializeDatabase();
         setupFrame();
         createUI();
@@ -42,12 +47,16 @@ public class AdminPanel extends JFrame {
         feedbackDatabase = new FeedbackDatabase();
     }
 
-    private void setupFrame() {
+    private void setupFrame() throws MalformedURLException {
         setTitle("Cinema Management System");
         setSize(1100, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setBackground(BACKGROUND_COLOR);
+        String imageUrl = "https://i.ibb.co/HVRfYtz/picture-1-1505503146.png"; // Đổi thành URL ảnh của bạn
+        URL url = new URL(imageUrl);
+        ImageIcon icon = new ImageIcon(url);
+        setIconImage(icon.getImage());
     }
 
     private void createUI() {
@@ -210,6 +219,7 @@ public class AdminPanel extends JFrame {
     }
 
     private void populateMovieFields(JPanel inputPanel, int selectedRow) {
+        // Truy xuất các thành phần theo chỉ số
         JTextField idField = (JTextField) inputPanel.getComponent(1);
         JTextField titleField = (JTextField) inputPanel.getComponent(3);
         JTextField genreField = (JTextField) inputPanel.getComponent(5);
@@ -221,9 +231,10 @@ public class AdminPanel extends JFrame {
         JTextField descriptionField = (JTextField) inputPanel.getComponent(17);
         JTextField mainActorsField = (JTextField) inputPanel.getComponent(19);
         JTextField showDateField = (JTextField) inputPanel.getComponent(21);
-        JPanel cinemaPanel = (JPanel) inputPanel.getComponent(23);
+        JPanel cinemaPanel = (JPanel) inputPanel.getComponent(22); // Adjusted index for cinemaPanel
         JCheckBox[] cinemaCheckBoxes = (JCheckBox[]) cinemaPanel.getClientProperty("checkBoxes");
     
+        // Điền dữ liệu từ bảng vào các trường
         idField.setText((String) movieTable.getValueAt(selectedRow, 0));
         titleField.setText((String) movieTable.getValueAt(selectedRow, 1));
         genreField.setText((String) movieTable.getValueAt(selectedRow, 2));
@@ -234,15 +245,26 @@ public class AdminPanel extends JFrame {
         directorField.setText((String) movieTable.getValueAt(selectedRow, 7));
         descriptionField.setText((String) movieTable.getValueAt(selectedRow, 8));
         mainActorsField.setText((String) movieTable.getValueAt(selectedRow, 9));
-        String selectedCinemasStr = (String) movieTable.getValueAt(selectedRow, 11);
-        List<String> selectedCinemas = Arrays.asList(selectedCinemasStr.split(",\\s*"));
-
+        showDateField.setText((String) movieTable.getValueAt(selectedRow, 10));
     
-        selectedCinemas = (List<String>) movieTable.getValueAt(selectedRow, 11); // Đảm bảo rằng dữ liệu tại cột 11 là List<String>
+        // Điền dữ liệu checkbox rạp chiếu
+        ArrayList<String> selectedCinemas;
+        Object value = movieTable.getValueAt(selectedRow, 11);
+        if (value instanceof ArrayList<?>) {
+            selectedCinemas = (ArrayList<String>) value;
+        } else if (value instanceof String) {
+            selectedCinemas = new ArrayList<>(Arrays.asList(((String) value).split(",\\s*")));
+        } else {
+            selectedCinemas = new ArrayList<>();
+        }
+
         for (JCheckBox checkBox : cinemaCheckBoxes) {
             checkBox.setSelected(selectedCinemas.contains(checkBox.getText()));
         }
     }
+    
+    
+    
     
     
 
@@ -258,7 +280,7 @@ public class AdminPanel extends JFrame {
         JTextField descriptionField = (JTextField) inputPanel.getComponent(17);
         JTextField mainActorsField = (JTextField) inputPanel.getComponent(19);
         JTextField showDateField = (JTextField) inputPanel.getComponent(21);
-        JPanel cinemaPanel = (JPanel) inputPanel.getComponent(23);
+        JPanel cinemaPanel = (JPanel) inputPanel.getComponent(22); // Adjusted index for cinemaPanel
         JCheckBox[] cinemaCheckBoxes = (JCheckBox[]) cinemaPanel.getClientProperty("checkBoxes");
 
         List<String> selectedCinemas = Arrays.stream(cinemaCheckBoxes)
@@ -266,7 +288,8 @@ public class AdminPanel extends JFrame {
                 .map(JCheckBox::getText)
                 .collect(Collectors.toList());
 
-        if (isAdd) {
+        if (isAdd) 
+        {
             movieDatabase.addMovie(
                     idField.getText(),
                     titleField.getText(),
@@ -280,7 +303,30 @@ public class AdminPanel extends JFrame {
                     releaseDateField.getText(),
                     mainActorsField.getText()
             );
-        } else {
+            CinemaManager cm = new CinemaManager();
+            MovieDatabase mvdb = new MovieDatabase();
+            SeatsDatabase sdtb = new SeatsDatabase();
+            ArrayList<Cinema> arl_cinema = new ArrayList<>(cm.getAllCinemas());
+            List<String> l_date = Arrays.asList(showDateField.getText().split(","));
+            ArrayList<String> arl_date = new ArrayList<>(l_date);
+            for(String j: arl_date)
+            {
+                String[] temp = j.trim().split("\\s+");
+                for(Cinema k: arl_cinema)
+                {
+                    for(String v: k.getShowHours())
+                    {
+                        String seatname = titleField.getText() + " / " + temp[1] + " / " 
+                        + k.getName() + " / " + v;
+                        sdtb.addSeats(seatname);
+                    }
+                    
+                }
+
+            }
+             
+        }
+        else {
             movieDatabase.updateMovie(
                     idField.getText(),
                     titleField.getText(),
@@ -322,26 +368,28 @@ public class AdminPanel extends JFrame {
         panel.setBackground(BACKGROUND_COLOR);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-
-        String[] labels = {"ID:", "Title:", "Genre:", "Duration:", "Release Date:", "Status:", "Image Path:", "Director:", "Description:", "Main Actors:", "Show Dates:"};
-        Map<String, JTextField> fieldsMap = new HashMap<>();
-
+        
+        // Mảng chứa nhãn
+        String[] labels = {"ID:", "Title:", "Genre:", "Duration:", "Release Date:", "Status:", 
+                           "Image Path:", "Director:", "Description:", "Main Actors:", "Show Dates:"};
+    
+        // Duyệt qua các nhãn và tạo JTextField
         for (int i = 0; i < labels.length; i++) {
-            gbc.gridx = 0;
-            gbc.gridy = i;
+            gbc.gridx = 0; // Cột đầu tiên: JLabel
+            gbc.gridy = i; // Dòng thứ i
             gbc.anchor = GridBagConstraints.WEST;
             JLabel label = new JLabel(labels[i]);
             label.setFont(REGULAR_FONT);
             panel.add(label, gbc);
-
-            gbc.gridx = 1;
+    
+            gbc.gridx = 1; // Cột thứ hai: JTextField
             gbc.fill = GridBagConstraints.HORIZONTAL;
             JTextField textField = new JTextField(20);
             textField.setFont(REGULAR_FONT);
-            fieldsMap.put(labels[i], textField);  // Store the text field in the map
             panel.add(textField, gbc);
         }
-
+    
+        // Panel chứa danh sách rạp chiếu
         List<Cinema> cinemas = cinemaManager.getAllCinemas();
         JCheckBox[] cinemaCheckBoxes = new JCheckBox[cinemas.size()];
         JPanel cinemaPanel = new JPanel(new GridLayout(cinemas.size(), 1));
@@ -349,15 +397,17 @@ public class AdminPanel extends JFrame {
             cinemaCheckBoxes[i] = new JCheckBox(cinemas.get(i).getName());
             cinemaPanel.add(cinemaCheckBoxes[i]);
         }
-        cinemaPanel.putClientProperty("checkBoxes", cinemaCheckBoxes);
-
-        gbc.gridx = 0;
-        gbc.gridy = labels.length;
-        gbc.gridwidth = 2;
+        cinemaPanel.putClientProperty("checkBoxes", cinemaCheckBoxes); // Lưu danh sách checkbox
+    
+        gbc.gridx = 0; 
+        gbc.gridy = labels.length; // Đặt dưới cùng của các thành phần trước
+        gbc.gridwidth = 2; 
         panel.add(cinemaPanel, gbc);
-
+    
         return panel;
     }
+    
+    
 
     private JPanel createAccountManagementPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
@@ -558,7 +608,6 @@ public class AdminPanel extends JFrame {
         panel.add(scrollPane, BorderLayout.CENTER);
 
         createCinemaContextMenu();
-
         JPanel buttonPanel = createCinemaButtonPanel();
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -593,7 +642,62 @@ public class AdminPanel extends JFrame {
             }
         });
     }
+    private void saveCinema(JPanel inputPanel, boolean isAdd) {
+        JTextField nameField = (JTextField) inputPanel.getComponent(1);
+        JTextField showHoursField = (JTextField) inputPanel.getComponent(3);
 
+        List<String> showHours = Arrays.asList(showHoursField.getText().split(","));
+
+        if (isAdd) 
+        {
+            cinemaManager.addCinema(nameField.getText(), showHours);
+            CinemaManager cm = new CinemaManager();
+            MovieDatabase mvdb = new MovieDatabase();
+            SeatsDatabase sdtb = new SeatsDatabase();
+            ArrayList<Cinema> arl_cinema = new ArrayList<>(cm.getAllCinemas());
+            ArrayList<Movie> arl_movie = new ArrayList<>(mvdb.getAllMovies());
+            for(Movie i: arl_movie)
+            {
+                String mvname = i.getTitle();
+
+                ArrayList<String> arl_date = new ArrayList<>(i.getShowDates());
+                for(String j: arl_date)
+                {
+                    String[] temp = j.split("\\s+");
+                    String[] hours = showHoursField.getText().split(",");
+                    for(String k: hours)
+                    {
+                        String seatname = i.getTitle() + " / " + temp[1] + " / " + nameField.getText() + " / " + k;
+                        sdtb.addSeats(seatname);
+                    }
+
+                }
+        }
+        } else {
+            cinemaManager.updateCinema(nameField.getText(), showHours);
+        }
+    }
+    
+    private JPanel createCinemaButtonPanel(JPanel inputPanel, JDialog dialog, boolean isAdd) {
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton saveButton = createStyledButton("Save", e -> {
+            if (areCinemaFieldsValid(inputPanel)) {
+                try {
+                    saveCinema(inputPanel, isAdd);
+                    refreshCinemaTable();
+                    dialog.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        buttonPanel.add(saveButton);
+
+        JButton cancelButton = createStyledButton("Cancel", e -> dialog.dispose());
+        buttonPanel.add(cancelButton);
+
+        return buttonPanel;
+    }
     private JPanel createCinemaButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.setBackground(BACKGROUND_COLOR);
@@ -604,15 +708,18 @@ public class AdminPanel extends JFrame {
         return buttonPanel;
     }
 
+    
+
     private void showAddCinemaDialog() {
         JDialog dialog = createCinemaDialog("Add Cinema", true);
         JPanel inputPanel = createCinemaInputPanel();
         dialog.add(inputPanel, BorderLayout.CENTER);
 
-        JPanel buttonPanel = createDialogButtonPanel(inputPanel, dialog, true);
+        JPanel buttonPanel = createCinemaButtonPanel(inputPanel, dialog, true);
         dialog.add(buttonPanel, BorderLayout.SOUTH);
         dialog.setVisible(true);
     }
+
 
     private void showEditCinemaDialog() {
         int selectedRow = cinemaTable.getSelectedRow();
@@ -627,7 +734,7 @@ public class AdminPanel extends JFrame {
 
         populateCinemaFields(inputPanel, selectedRow);
 
-        JPanel buttonPanel = createDialogButtonPanel(inputPanel, dialog, false);
+        JPanel buttonPanel = createCinemaButtonPanel(inputPanel, dialog, false);
         dialog.add(buttonPanel, BorderLayout.SOUTH);
         dialog.setVisible(true);
     }
@@ -643,9 +750,17 @@ public class AdminPanel extends JFrame {
     private void populateCinemaFields(JPanel inputPanel, int selectedRow) {
         JTextField nameField = (JTextField) inputPanel.getComponent(1);
         JTextField showHoursField = (JTextField) inputPanel.getComponent(3);
-
+        
+        
         nameField.setText((String) cinemaTable.getValueAt(selectedRow, 0));
-        showHoursField.setText(String.join(", ", (List<String>) cinemaTable.getValueAt(selectedRow, 1)));
+        Object value = cinemaTable.getValueAt(selectedRow, 1);
+        if (value instanceof List<?>) {
+            showHoursField.setText(String.join(", ", (List<String>) value));
+        } else if (value instanceof String) {
+            showHoursField.setText((String) value);
+        } else {
+            showHoursField.setText("");
+        }
     }
 
     private void showDeleteCinemaDialog() {
@@ -660,7 +775,7 @@ public class AdminPanel extends JFrame {
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the cinema: " + cinemaName + "?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             try {
-//                cinemaManager.deleteCinema(cinemaName);
+                cinemaManager.deleteCinema(cinemaName);
                 refreshCinemaTable();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error deleting cinema: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -812,14 +927,14 @@ public class AdminPanel extends JFrame {
         String user = (String) feedbackTable.getValueAt(selectedRow, 1);
 
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the feedback for movie: " + movie + " by user: " + user + "?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-//        if (result == JOptionPane.YES_OPTION) {
-//            try {
-//                feedbackDatabase.deleteFeedback(movie, user);
-//                refreshFeedbackTable();
-//            } catch (Exception ex) {
-//                JOptionPane.showMessageDialog(this, "Error deleting feedback: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                feedbackDatabase.deleteFeedback(movie, user);
+                refreshFeedbackTable();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error deleting feedback: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private JPanel createFeedbackInputPanel() {
@@ -949,15 +1064,15 @@ public class AdminPanel extends JFrame {
     private void refreshFeedbackTable() {
         DefaultTableModel model = (DefaultTableModel) feedbackTable.getModel();
         model.setRowCount(0);
-//        List<Feedback> feedbacks = feedbackDatabase.getAllFeedbacks();
-//        for (Feedback feedback : feedbacks) {
-//            model.addRow(new Object[]{
-//                    feedback.getMovie(),
-//                    feedback.getUser(),
-//                    feedback.getFeedback(),
-//                    feedback.getStatus()
-//            });
-//        }
+       List<Feedback> feedbacks = feedbackDatabase.getAllFeedbacks();
+       for (Feedback feedback : feedbacks) {
+           model.addRow(new Object[]{
+                   feedback.getMovie(),
+                   feedback.getUser(),
+                   feedback.getFeedback(),
+                   feedback.getStatus()
+           });
+       }
     }
 
     private boolean areMovieFieldsValid(JPanel panel) {
@@ -1015,6 +1130,7 @@ public class AdminPanel extends JFrame {
         }
         return true;
     }
+    
 
     private boolean areFeedbackFieldsValid(JPanel panel) {
         JTextField movieField = (JTextField) panel.getComponent(1);
@@ -1073,7 +1189,12 @@ public class AdminPanel extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            AdminPanel app = new AdminPanel();
+            AdminPanel app = null;
+            try {
+                app = new AdminPanel();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(AdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             app.setVisible(true);
         });
     }

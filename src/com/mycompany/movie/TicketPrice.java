@@ -18,10 +18,13 @@ public class TicketPrice
     public int getPrice() {
         return price;
     }
-    
-    public String getTotalPrice()
+    public int getTotalPrice()
     {
-        return String.valueOf(price * quantity) + " VND";
+        return price * quantity;
+    }
+    public String getTotalPriceToVND()
+    {
+        return String.valueOf(this.getTotalPrice()) + " VND";
     }
     
 }

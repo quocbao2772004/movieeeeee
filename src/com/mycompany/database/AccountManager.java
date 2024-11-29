@@ -77,10 +77,40 @@ public class AccountManager {
             return account.getString("email");
         }
     }
+    public boolean check_admin(String username) {
+        Document query = new Document("username", username);
+        Document account = collection.find(query).first();
+
+        if (account == null) {
+            System.out.println("Account not found: " + username);
+            return false;
+        } else {
+            String role = account.getString("role");
+            if ("admin".equals(role)) {
+                System.out.println("Admin account: " + username);
+                return true;
+            } else {
+                System.out.println("Not an admin account: " + username);
+                return false;
+            }
+        }
+    }
 
     public List<Document> getAllAccounts() {
         List<Document> accounts = new ArrayList<>();
         collection.find().into(accounts);
         return accounts;
     }
+    
+    public String getEmailByUsername(String username) {
+        Document query = new Document("username", username);
+        Document account = collection.find(query).first();
+        if (account == null) {
+            System.out.println("Account not found: " + username);
+            return null;
+        } else {
+            return account.getString("email");
+        }
+    }
+
 }

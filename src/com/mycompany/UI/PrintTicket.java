@@ -16,19 +16,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
-public class PrintTicket 
+public class PrintTicket extends JPanel
 {
-    public static void printTicket(String movie_name)
+    private JFrame myFrame = new JFrame("Movie Ticket System");
+    private BufferedImage image;
+    public PrintTicket()
     {
-        JFrame myFrame = new JFrame("Movie Ticket System");
+        
+    }
+    
+    public void printTicket(String movie_name, Movie moviee, String usrn) throws IOException
+    {
         myFrame.setSize(400, 600);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setLayout(null);
-        Ticket(myFrame, movie_name);
+        Ticket(myFrame, movie_name, moviee, usrn);
         myFrame.setVisible(true);
     }
-    public static String check_Hall()
+    public String check_Hall()
     {
         boolean checkH = false;
         boolean checkG = false;
@@ -42,8 +49,9 @@ public class PrintTicket
         return "1, 2";
        
     }
-    public static void Ticket(JFrame myFrame, String movie_name)
+    public void Ticket(JFrame myFrame, String movie_name, Movie moviee, String usrn)
     {
+        
         JPanel myTicket = new JPanel();
         myTicket.setLayout(null);
         myTicket.setBounds(40, 20, 300, 450);
@@ -57,12 +65,12 @@ public class PrintTicket
         name_ticket.setForeground(Color.WHITE);
         name_ticket.setBounds(10,10, 300, 50);
         frame.add(name_ticket);
-        myTicket.setBackground(Color.decode("#DDDDDD"));
+        myTicket.setBackground(Color.gray);
         myTicket.add(frame);
         // in cho ngoi
         JPanel p2 = new JPanel();
         p2.setLayout(null);
-        p2.setBounds(0,81,300, 350);
+        p2.setBounds(0,81,300, 250);
         p2.setBackground(Color.gray);
         JLabel inf1 = new JLabel("Seat");
         inf1.setLayout(null);
@@ -82,7 +90,7 @@ public class PrintTicket
         inf2.setLayout(null);
         inf2.setBounds(10, 75, 30, 30);
         inf2.setFont(new Font("Arial", Font.PLAIN, 12));
-        JLabel content_inf2 = new JLabel(newTicket.getTotalPrice());
+        JLabel content_inf2 = new JLabel(newTicket.getTotalPriceToVND());
         content_inf2.setLayout(null);
         content_inf2.setBounds(10, 93, 100, 30);
         content_inf2.setFont(new Font("Arial", Font.BOLD, 12));
@@ -146,36 +154,62 @@ public class PrintTicket
         
         JLabel line = new JLabel("------------------------------------------------------------------------");
         line.setLayout(null);
-        line.setBounds(5, 190, 300, 30);
+        line.setBounds(5, 190, 300, 10);
         p2.add(line);
-        JLabel qrLabel = new JLabel("Scan QR to pay:");
-        qrLabel.setBounds(10, 210, 150, 30);
-        p2.add(qrLabel);
-
-        BufferedImage qrImage = Utils.getQR(Integer.valueOf(newTicket.getTotalPrice()), "Ticket Payment");
-        if (qrImage != null) {
-            JLabel qrDisplay = new JLabel(new ImageIcon(qrImage));
-            qrDisplay.setBounds(10, 240, 100, 100);
-            p2.add(qrDisplay);
-        }
-
-        JButton payButton = new JButton("Pay and Confirm");
-        payButton.setBounds(10, 350, 150, 30);
-        payButton.addActionListener(e -> {
-            if (Utils.checkTicketExists("dummy_ticket")) {
-                if (Utils.sendEmail("John Doe", movie_name, date, time, seats, "example@gmail.com")) {
-                    JOptionPane.showMessageDialog(myFrame, "Payment successful! Email sent.");
-                } else {
-                    JOptionPane.showMessageDialog(myFrame, "Error: Unable to send email.");
+               
+        // set QRcode
+        Utils utils = new Utils();
+        process_functions pf = new process_functions();
+        JPanel qr_code = new JPanel();
+        qr_code.setLayout(null);
+        qr_code.setBounds(40, 332, 300, 120);
+        qr_code.setBackground(Color.gray);
+        String idTicket = pf.createIDTicket(usrn, moviee);
+        System.out.println("idTicket = " + idTicket);
+        HighQualityImagePanel QRpanel = new HighQualityImagePanel(newTicket.getTotalPrice(), idTicket);
+        QRpanel.setBounds(90,0, 120, 120);
+        qr_code.add(QRpanel);
+        JButton ok = new JButton("Get Ticket");
+        ok.setLayout(null);
+        ok.setBounds(130, 480, 100, 25);
+        ok.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                
+//                if(utils.checkTicketExists(idTicket))
+                {
+                    System.out.println(idTicket);
+                    JOptionPane.showMessageDialog(myFrame, "Successful payment");
+                    AccountManager am = new AccountManager();
+                    utils.sendEmail(usrn, moviee.getTitle(), Receipt.save_choosen_day.get(0), Receipt.save_choosen_time.get(0), seats, am.getEmailByUsername(usrn));
+                    SeatsDatabase sdtb = new SeatsDatabase();
+                    SeatUI seat = new SeatUI();
+                    String seatname = seat.getSeatName(moviee.getTitle());
+                    System.out.println(SeatUI.save_seat.size());
+                    System.out.println("seatname = " + seatname);
+                    for(String i: SeatUI.save_seat)
+                    {
+                        System.out.println("i = " + i);
+                        sdtb.updateSeatStatus(seatname, i);
+                    }
+                    
                 }
-            } else {
-                JOptionPane.showMessageDialog(myFrame, "Error: Payment failed.");
+//                else
+//                {
+//                    System.out.println(idTicket);
+//                    JOptionPane.showMessageDialog(myFrame, "You haven't paid successfully");
+//
+//                }
             }
+            
         });
-        p2.add(payButton);
-
+        myFrame.add(qr_code);
+        myFrame.add(ok);
         myTicket.add(p2);
         myFrame.add(myTicket);
+        
 //        return myTicket;
     }
 }

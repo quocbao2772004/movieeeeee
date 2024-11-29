@@ -10,17 +10,17 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static com.mycompany.UI.Login.Login_Interface;
 import static com.mycompany.UI.process_functions.*;
 public class RegisterPage 
 {
-    public static JPanel Design_leftPanel()
+    private JFrame myFrame;
+    public JPanel Design_leftPanel()
     {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(null);
         
         leftPanel.setBounds(0,0,500, 750);
-        ImageIcon originalImage = new ImageIcon("C:\\Users\\PC\\Downloads\\its-movie-time-vector.jpg");
+        ImageIcon originalImage = new ImageIcon("images//its-movie-time-vector.jpg");
         Image scaledImage = originalImage.getImage().getScaledInstance(leftPanel.getWidth(), leftPanel.getHeight(), Image.SCALE_SMOOTH); 
         ImageIcon resizedImage = new ImageIcon(scaledImage);
         
@@ -32,7 +32,7 @@ public class RegisterPage
         return leftPanel;
     }
     
-    public static JPanel Design_RightPanel(JFrame myFrame)
+    public JPanel Design_RightPanel(JFrame myFrame)
     {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(null);
@@ -75,10 +75,11 @@ public class RegisterPage
             @Override
             public void actionPerformed(ActionEvent e) 
             {
+                process_functions pf = new process_functions();
                 Account new_account = new Account(text_username.getText(), text_email.getText(), text_Password.getText());
-                if(check_is_valid(new_account.getUsername())
-                        && check_is_valid(new_account.getEmail())
-                        && check_is_valid(new_account.getPassword()))
+                if(pf.check_is_valid(new_account.getUsername())
+                        && pf.check_is_valid(new_account.getEmail())
+                        && pf.check_is_valid(new_account.getPassword()))
                 {
                     AccountManager am = new AccountManager();
                     if(!am.check_exit(new_account.getUsername()))
@@ -116,7 +117,8 @@ public class RegisterPage
             @Override
             public void actionPerformed(ActionEvent e) {
                 myFrame.dispose();
-                Login_Interface();
+                Login li = new Login();
+                li.Login_Interface();
             }
             
         });
@@ -126,9 +128,9 @@ public class RegisterPage
         
         return rightPanel;
     }
-    public static void Register() 
+    public void RegisterPage() 
     {
-        JFrame myFrame = new JFrame("Movie Ticket System");
+        myFrame = new JFrame("Movie Ticket System");
         myFrame.setSize(1150, 750);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setLayout(null);

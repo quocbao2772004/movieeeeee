@@ -17,20 +17,28 @@ import java.util.logging.Logger;
 import static com.mycompany.UI.Receipt.*;
 public class SeatUI 
 {
+    private JFrame myFrame;
     public static ArrayList <String> save_seat = new ArrayList<>();
-    public static String tos = "";
-    public static void chooseSeat(Movie moviee, String mvname, String usrn)
+    private LinkedHashSet<String> save_set_seat = new LinkedHashSet<>();
+    private String tos;
+    public SeatUI()
     {
-        JFrame myFrame = new JFrame("Movie Ticket System");
+        tos = "";
+        
+    }
+    public void chooseSeat(Movie moviee, String mvname, String usrn)
+    {
+        myFrame = new JFrame("Movie Ticket System");
         myFrame.setSize(1150, 750);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setLayout(null);
-        myFrame.add(Receipt.left_Panel(moviee, myFrame, usrn));
-        myFrame.add(right_Panel(myFrame, mvname));
+        Receipt rc = new Receipt();
+        myFrame.add(rc.left_Panel(moviee, myFrame, usrn));
+        myFrame.add(right_Panel(myFrame, mvname, moviee, usrn));
 //        System.out.println(getSeatName());
         myFrame.setVisible(true);
     }
-    public static String getSeatName(String mvname)
+    public String getSeatName(String mvname)
     {
         String seatname = "";
         for(String v: save_choosen_day)
@@ -49,7 +57,7 @@ public class SeatUI
         
         return seatname;
     }
-    public static JPanel right_Panel(JFrame myFrame, String mvname)
+    private JPanel right_Panel(JFrame myFrame, String mvname, Movie moviee, String usrn)
     {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(null);
@@ -126,7 +134,8 @@ public class SeatUI
                 public void actionPerformed(ActionEvent e) 
                 {
                     h.get(index-1).setBackground(Color.YELLOW);
-                    save_seat.add(String.format("H%02d", index));
+                    save_set_seat.add(String.format("H%02d", index));
+//                    save_seat.add(String.format("H%02d", index));
                 }
                 
             });
@@ -165,7 +174,8 @@ public class SeatUI
                 public void actionPerformed(ActionEvent e) 
                 {
                     g.get(index-1).setBackground(Color.YELLOW);
-                    save_seat.add(String.format("G%02d", index));
+                    save_set_seat.add(String.format("G%02d", index));
+//                    save_seat.add(String.format("G%02d", index));
                 }
                 
             });
@@ -187,7 +197,7 @@ public class SeatUI
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                
+                save_seat = new ArrayList<>(save_set_seat);
                 String content = String.valueOf(save_seat.size()) + " ticket(s)";
                 JLabel total = new JLabel(content);
                 
@@ -199,7 +209,12 @@ public class SeatUI
                 bottomPanel.setBounds(0, 200, 1000, 550);
                 bottomPanel.repaint();
                 myFrame.dispose();
-                PrintTicket.printTicket(mvname);
+                PrintTicket pt = new PrintTicket();
+                try {
+                    pt.printTicket(mvname, moviee, usrn);
+                } catch (IOException ex) {
+                    Logger.getLogger(SeatUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
                 
         });
@@ -238,7 +253,7 @@ public class SeatUI
         //        bottomPanel.add(note);
         return rightPanel;
     }
-    public static class CurveScreen extends JPanel 
+    private class CurveScreen extends JPanel 
     {
         @Override
         protected void paintComponent(Graphics g) 

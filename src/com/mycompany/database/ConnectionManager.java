@@ -5,8 +5,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 public class ConnectionManager {
-    private static final String URI = "mongodb+srv://dinhhung1508:hung1234@cluster0.gnfqipw.mongodb.net/";
-    private static final String DATABASE_NAME = "OOP_JAVA"; // Replace with your DB name
+    private static final String URI = "mongodb+srv://dinhhung1508:hung15082004@cluster0.gnfqipw.mongodb.net/";
+    private static final String DATABASE_NAME = "OOP_JAVA"; 
 
     public static MongoDatabase getDatabase() {
         MongoClient client = MongoClients.create(URI);

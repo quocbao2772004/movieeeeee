@@ -14,7 +14,10 @@ public class Movie {
     private int duration;
     private String releaseDate;
     private String mainActors;
-
+    public Movie()
+    {
+        
+    }
     public Movie(String id, String title, List<String> cinemas, List<String> showDates, String genre, String imagePath, String director, String description, int duration, String releaseDate, String mainActors) {
         this.id = id;
         this.title = title;

@@ -13,9 +13,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 public class FeedbackUI 
 {
-    public static void SendFeedBack(JFrame myFrame, Movie moviee, String usrn)
+    private JFrame fb = new JFrame("Give us your feedback");
+    public FeedbackUI()
     {
-        JFrame fb = new JFrame("Feedback");
+        
+    }
+    public void SendFeedBack(JFrame myFrame, Movie moviee, String usrn)
+    {
+        
         fb.setSize(600, 400);
         fb.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fb.setLayout(null);
@@ -36,9 +41,12 @@ public class FeedbackUI
             {
                 Feedback Fb = new Feedback(usrn, moviee.getTitle(), urfb.getText());
                 FeedbackDatabase fbdtb = new FeedbackDatabase();
-                fbdtb.addFeedback(Fb.getMovie(), Fb.getUser(), Fb.getFeedback(), "neutral");
+                Utils utils = new Utils();
+                fbdtb.addFeedback(Fb.getMovie(), Fb.getUser(), Fb.getFeedback(), utils.classifyFeedback(Fb.getFeedback()));
                 fb.dispose();
-                EachMovie.EachMovie(moviee, usrn);
+                EachMovie em2 = new EachMovie();
+                em2.showEachMovie(moviee, usrn);
+//                EachMovie.EachMovie(moviee, usrn);
                 myFrame.dispose();
             }
             

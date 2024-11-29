@@ -14,7 +14,7 @@ import static com.mycompany.UI.process_functions.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 public class Receipt 
 {
-    public static JFrame myFrame = new JFrame("Movie Ticket System");
+    private JFrame myFrame = new JFrame("Movie Ticket System");
     public static ArrayList<JButton> save_button = new ArrayList<>();
     public static ArrayList<JButton> save_day = new ArrayList<>();
     public static ArrayList<String> save_choosen_day = new ArrayList<>();
@@ -22,7 +22,11 @@ public class Receipt
     public static ArrayList <JButton> save_buyButton = new ArrayList<>();
     public static Map<JButton, String> buttonToCinemaMap = new LinkedHashMap<>();
     public static ArrayList<String> selectedCinema = new ArrayList<>();
-    public static void getReceipt(Movie moviee, String usrn)
+
+    public Receipt() {
+    }
+    
+    public void getReceipt(Movie moviee, String usrn)
     {
         myFrame = new JFrame("Movie Ticket System");
         myFrame.setSize(1150, 750);
@@ -34,7 +38,7 @@ public class Receipt
 //        myFrame.add(right_Panel(moviee, usrn));
         myFrame.setVisible(true);
     }
-    public static JPanel left_Panel(Movie moviee, JFrame myFrame, String usrn)
+    public JPanel left_Panel(Movie moviee, JFrame myFrame, String usrn)
     {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(null);
@@ -43,7 +47,7 @@ public class Receipt
         JPanel sub0 = new JPanel();
         sub0.setLayout(null);
         sub0.setBounds(0, 30, 150, 200);
-        ImageIcon originalImage = new ImageIcon("C:\\Users\\PC\\Downloads\\user.png");
+        ImageIcon originalImage = new ImageIcon("images//user.png");
         Image scaledImage = originalImage.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH); 
         ImageIcon resizedImage = new ImageIcon(scaledImage);
         JLabel imageLabel = new JLabel(resizedImage);
@@ -72,7 +76,9 @@ public class Receipt
             public void actionPerformed(ActionEvent e) {
                 myFrame.dispose();
                 try {
-                    Menu.show_Menu(usrn1);
+                    Menu m = new Menu();
+                    m.show_Menu(usrn1);
+//                    Menu.show_Menu(usrn1);
                 } catch (IOException ex) {
                     Logger.getLogger(Receipt.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -88,8 +94,9 @@ public class Receipt
         sendFeedback.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                FeedbackUI.SendFeedBack(myFrame, moviee, usrn);
+                FeedbackUI fback = new FeedbackUI();
+                fback.SendFeedBack(myFrame, moviee, usrn);
+
             }
             
         });
@@ -103,7 +110,8 @@ public class Receipt
             @Override
             public void actionPerformed(ActionEvent e) {
                 myFrame.dispose();
-                Login.Login_Interface();
+                Login li = new Login();
+                li.Login_Interface();
             }
             
         });
@@ -117,11 +125,11 @@ public class Receipt
     }
     
     
-    public static void right_Panel(Movie moviee, String usrn) 
+    public void right_Panel(Movie moviee, String usrn) 
     {
         CinemaManager cm = new CinemaManager();
         ArrayList<Cinema> arl_cinema = new ArrayList<>(cm.getAllCinemas());
-
+        process_functions pf = new process_functions();
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(null);
         rightPanel.setBounds(151, 0, 1000, 750);
@@ -131,8 +139,8 @@ public class Receipt
         JPanel lPanel = new JPanel();
         lPanel.setBounds(0, 0, 300, 750);
         lPanel.setBackground(Color.BLACK);
-        lPanel.add(processing_image_from_url(moviee.getImagePath(), 10, 20, 150, 200));
-        lPanel.add(processing_label(moviee.getTitle(), 680, 190, 180, 50));
+        lPanel.add(pf.processing_image_from_url(moviee.getImagePath(), 10, 20, 150, 200));
+        lPanel.add(pf.processing_label(moviee.getTitle(), 680, 190, 180, 50));
         rightPanel.add(lPanel);
 
         // Right of right_Panel
@@ -150,8 +158,8 @@ public class Receipt
         for (String i : moviee.getShowDates()) 
         {
             String[] day = i.split("\\s+");
-            sub0.add(function_day(day[0], x_day, y_day, w_day, h_day));
-            JButton date = function_date(day[1], x_date, y_date, w_date, h_date);
+            sub0.add(pf.function_day(day[0], x_day, y_day, w_day, h_day));
+            JButton date = pf.function_date(day[1], x_date, y_date, w_date, h_date);
             sub0.add(date);
             save_day.add(date);
             x_day += 110;
@@ -211,13 +219,13 @@ public class Receipt
 
             int x_time = 10;
             for (String j : i.getShowHours()) {
-                JButton time = setButtonTime(j, x_time, y_time, w_time, h_time);
+                JButton time = pf.setButtonTime(j, x_time, y_time, w_time, h_time);
                 sub1.add(time);
                 save_button.add(time);
                 buttonToCinemaMap.put(time, i.getName());
                 x_time += 120;
             }
-            sub1.add(setLine(10, y_line, 650, 1));
+            sub1.add(pf.setLine(10, y_line, 650, 1));
             y_line += 140;
             y_time += 150;
         }
@@ -243,6 +251,7 @@ public class Receipt
         selectButton.setBackground(Color.YELLOW);
         selectButton.setFont(new Font("Arial", Font.BOLD, 12));
         selectButton.setVisible(false);
+        
         selectButton.addActionListener(new ActionListener() 
             {
                 final String name1 = moviee.getTitle();
@@ -251,8 +260,25 @@ public class Receipt
                 public void actionPerformed(ActionEvent e) 
                 {
                     
+                    
+                    String seatname = "";
+                    for(String v: save_choosen_day)
+                    {
+                        for(String i: selectedCinema)
+                        {
+                            if(i!=null)
+                            {
+                                for(String j: save_choosen_time)
+                                {
+                                    seatname = name1 + " / " + v + " / " + i + " / " + j;
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("seatname = " + seatname);
                     myFrame.dispose();
-                    com.mycompany.UI.SeatUI.chooseSeat(moviee, name1, usrn1);
+                    SeatUI seat = new SeatUI();
+                    seat.chooseSeat(moviee, name1, usrn1);
                 }
             });
 
@@ -270,9 +296,12 @@ public class Receipt
         };
 
         
-        for (JButton btn : save_button) {
-            btn.addActionListener(e -> {
-                for (JButton b : save_button) {
+        for (JButton btn : save_button) 
+        {
+            btn.addActionListener(e -> 
+            {
+                for (JButton b : save_button) 
+                {
                     b.setBackground(Color.WHITE);
                     save_choosen_time.remove(b.getText());
                     selectedCinema.remove(buttonToCinemaMap.get(b));
