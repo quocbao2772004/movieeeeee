@@ -84,13 +84,25 @@ public class PrintTicket extends JPanel
         p2.add(inf1);
         p2.add(content_inf1);
         // in gia
-        int quantity = SeatUI.save_seat.size();
-        TicketPrice newTicket = new TicketPrice(quantity, 50000);
+        ArrayList<TicketPrice> arl_price = new ArrayList<>();
+        int quantity_H = 0;
+        int quantity_G = 0;
+        for(int i=0;i< SeatUI.save_seat.size();i++)
+        {
+            if(SeatUI.save_seat.get(i).charAt(0) == 'H')
+            {
+                quantity_H+=1;
+            }
+            else quantity_G += 1;
+        }
+        TicketPrice TicketH = new RegularTicket(quantity_H); 
+        TicketPrice TicketG = new VIPTicket(quantity_G);
+        int TotalPrice = TicketH.getTotalPrice() + TicketG.getTotalPrice();
         JLabel inf2 = new JLabel("Price");
         inf2.setLayout(null);
         inf2.setBounds(10, 75, 30, 30);
         inf2.setFont(new Font("Arial", Font.PLAIN, 12));
-        JLabel content_inf2 = new JLabel(newTicket.getTotalPriceToVND());
+        JLabel content_inf2 = new JLabel(String.valueOf(TotalPrice) + "VND");
         content_inf2.setLayout(null);
         content_inf2.setBounds(10, 93, 100, 30);
         content_inf2.setFont(new Font("Arial", Font.BOLD, 12));
@@ -166,7 +178,7 @@ public class PrintTicket extends JPanel
         qr_code.setBackground(Color.gray);
         String idTicket = pf.createIDTicket(usrn, moviee);
         System.out.println("idTicket = " + idTicket);
-        HighQualityImagePanel QRpanel = new HighQualityImagePanel(newTicket.getTotalPrice(), idTicket);
+        HighQualityImagePanel QRpanel = new HighQualityImagePanel(TotalPrice, idTicket);
         QRpanel.setBounds(90,0, 120, 120);
         qr_code.add(QRpanel);
         JButton ok = new JButton("Get Ticket");

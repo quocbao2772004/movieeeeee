@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import static com.mycompany.UI.process_functions.*;
+import java.util.Collections;
 
 public class Menu 
 {
@@ -136,6 +137,7 @@ public class Menu
     {
         MovieDatabase movieDatabase = new MovieDatabase();
         ArrayList<Movie> movies = new ArrayList<>(movieDatabase.getAllMovies());
+        Collections.sort(movies);
         JPanel movieListPanel = new JPanel();
         movieListPanel.setLayout(null);
         movieListPanel.setPreferredSize(new Dimension(985, ((movies.size() + 2) / 3) * 300));

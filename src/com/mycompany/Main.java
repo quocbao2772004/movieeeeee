@@ -16,7 +16,8 @@ public class Main
     {
           Login li = new Login();
           li.Login_Interface();    
-          
+//         TicketPrice i = new RegularTicket(10);
+//         System.out.println(i.getPrice());
           
 
     }

@@ -2,7 +2,8 @@ package com.mycompany.movie;
 
 import java.util.List;
 
-public class Movie {
+public class Movie implements Comparable<Movie>
+{
     private String id;
     private String title;
     private List<String> cinemas;
@@ -32,7 +33,6 @@ public class Movie {
         this.mainActors = mainActors;
     }
 
-    // Getters and setters for each field
     public String getId() {
         return id;
     }
@@ -119,5 +119,10 @@ public class Movie {
 
     public void setMainActors(String mainActors) {
         this.mainActors = mainActors;
+    }
+    @Override
+    public int compareTo(Movie o)
+    {
+        return this.id.compareTo(o.id);
     }
 }
