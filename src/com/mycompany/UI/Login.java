@@ -142,17 +142,17 @@ public class Login {
                     
                     if (accountManager.check_admin(username)) 
                     {
-                        myFrame.dispose();
+                        
                         AdminPanel adminPanel = new AdminPanel();
                         adminPanel.setVisible(true);
-                        
+                        myFrame.dispose();
                     } 
                     else 
                     {
                         JOptionPane.showMessageDialog(myFrame, "Login successfully!");
-                        myFrame.dispose();
                         Menu menu = new Menu();
                         menu.show_Menu(username);
+                        myFrame.dispose();
                     }
                 } else {
                     JOptionPane.showMessageDialog(myFrame, "Wrong username or password!");

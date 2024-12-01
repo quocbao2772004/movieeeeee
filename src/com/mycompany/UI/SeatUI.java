@@ -208,10 +208,11 @@ public class SeatUI
                 bottomPanel.revalidate();
                 bottomPanel.setBounds(0, 200, 1000, 550);
                 bottomPanel.repaint();
-                myFrame.dispose();
+                
                 PrintTicket pt = new PrintTicket();
                 try {
                     pt.printTicket(mvname, moviee, usrn);
+                    myFrame.dispose();
                 } catch (IOException ex) {
                     Logger.getLogger(SeatUI.class.getName()).log(Level.SEVERE, null, ex);
                 }

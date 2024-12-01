@@ -74,10 +74,11 @@ public class Receipt
             final String usrn1 = usrn;
             @Override
             public void actionPerformed(ActionEvent e) {
-                myFrame.dispose();
+                
                 try {
                     Menu m = new Menu();
                     m.show_Menu(usrn1);
+                    myFrame.dispose();
 //                    Menu.show_Menu(usrn1);
                 } catch (IOException ex) {
                     Logger.getLogger(Receipt.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,9 +110,10 @@ public class Receipt
         logout.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                myFrame.dispose();
+                
                 Login li = new Login();
                 li.Login_Interface();
+                myFrame.dispose();
             }
             
         });
@@ -276,9 +278,10 @@ public class Receipt
                         }
                     }
                     System.out.println("seatname = " + seatname);
-                    myFrame.dispose();
+                    
                     SeatUI seat = new SeatUI();
                     seat.chooseSeat(moviee, name1, usrn1);
+                    myFrame.dispose();
                 }
             });
 

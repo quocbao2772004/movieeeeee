@@ -100,9 +100,10 @@ public class EachMovie
         buy_button.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                myFrame.dispose();
+                
                 Receipt rc = new Receipt();
                 rc.getReceipt(moviee, usrn);
+                myFrame.dispose();
             }
             
         });

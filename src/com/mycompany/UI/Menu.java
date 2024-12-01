@@ -173,8 +173,9 @@ public class Menu
 
     private void showMovieDetails(Movie movie, String username) 
     {
-        myFrame.dispose();
+        
         EachMovie eachMovie = new EachMovie();
         eachMovie.showEachMovie(movie, username);
+        myFrame.dispose();
     }
 }
