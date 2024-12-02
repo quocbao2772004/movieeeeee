@@ -1,5 +1,5 @@
 
-package com.mycompany.movie;
+package com.mycompany.model;
 import java.io.*;
 import java.util.*;
 

@@ -1,5 +1,5 @@
 
-package com.mycompany.movie;
+package com.mycompany.model;
 
 public class Seats implements Comparable<Seats>{
     private String seat;

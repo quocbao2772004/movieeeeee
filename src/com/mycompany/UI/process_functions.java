@@ -1,5 +1,5 @@
 package com.mycompany.UI;
-import com.mycompany.movie.*;
+import com.mycompany.model.Movie;
 import com.mycompany.database.*;
 import java.util.*;
 import javax.swing.*;

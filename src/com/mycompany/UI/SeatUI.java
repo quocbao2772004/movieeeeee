@@ -1,5 +1,6 @@
 package com.mycompany.UI;
-import com.mycompany.movie.*;
+import com.mycompany.model.Movie;
+import com.mycompany.model.Seats;
 import com.mycompany.database.*;
 
 import java.awt.*;

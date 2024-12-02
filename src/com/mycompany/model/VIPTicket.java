@@ -1,9 +1,10 @@
-package com.mycompany.movie;
 
-public class RegularTicket extends TicketPrice {
-    private int price = 50000;
+package com.mycompany.model;
 
-    public RegularTicket(int quantity) {
+public class VIPTicket extends TicketPrice
+{
+    private int price = 60000;
+    public VIPTicket(int quantity) {
         super(quantity);
     }
 
@@ -11,9 +12,9 @@ public class RegularTicket extends TicketPrice {
     public int getPrice() {
         return price;
     }
-
     @Override
     public int getTotalPrice() {
         return super.getQuantity() * this.getPrice();
     }
+
 }

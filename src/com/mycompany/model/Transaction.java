@@ -1,5 +1,5 @@
 
-package com.mycompany.movie;
+package com.mycompany.model;
 
 public class Transaction {
     private String username;

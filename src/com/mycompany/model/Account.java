@@ -1,4 +1,4 @@
-package com.mycompany.movie;
+package com.mycompany.model;
 
 public class Account {
     private String username;
@@ -24,6 +24,18 @@ public class Account {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getEmail() {

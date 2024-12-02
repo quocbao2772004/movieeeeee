@@ -1,5 +1,4 @@
 package com.mycompany.database;
-import com.mycompany.movie.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 
 package com.mycompany.database;
-import com.mycompany.movie.*;
+import com.mycompany.model.Feedback;
 import java.util.List;
 import java.util.ArrayList;
 

@@ -1,6 +1,7 @@
 
 package com.mycompany.UI;
-import com.mycompany.movie.*;
+import com.mycompany.model.Movie;
+import com.mycompany.model.Feedback;
 import com.mycompany.database.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -65,19 +66,19 @@ public class EachMovie
         director.setFont(new Font("Arial", Font.PLAIN, 14));
         director.setForeground(Color.LIGHT_GRAY);
 
-        JLabel description = pf.processing_label("<html><b>Description:</b> " + moviee.getDescription() + "</html>", 10, 120, 800, 30);
+        JLabel description = pf.processing_label("<html><b>Description:</b> " + moviee.getDescription() + "</html>", 10, 120, 800, 90);
         description.setFont(new Font("Arial", Font.ITALIC, 14));
         description.setForeground(Color.LIGHT_GRAY);
 
-        JLabel duration = pf.processing_label("<html><b>Duration:</b> " + moviee.getDuration() + " minutes</html>", 10, 160, 800, 30);
+        JLabel duration = pf.processing_label("<html><b>Duration:</b> " + moviee.getDuration() + " minutes</html>", 10, 220, 800, 30);
         duration.setFont(new Font("Arial", Font.PLAIN, 14));
         duration.setForeground(Color.LIGHT_GRAY);
 
-        JLabel premiere_date = pf.processing_label("<html><b>Release date:</b> " + moviee.getReleaseDate() + "</html>", 10, 200, 800, 30);
+        JLabel premiere_date = pf.processing_label("<html><b>Release date:</b> " + moviee.getReleaseDate() + "</html>", 10, 260, 800, 30);
         premiere_date.setFont(new Font("Arial", Font.PLAIN, 14));
         premiere_date.setForeground(Color.LIGHT_GRAY);
 
-        JLabel main_actor = pf.processing_label("<html><b>Main actors:</b> " + moviee.getMainActors() + "</html>", 10, 240, 800, 30);
+        JLabel main_actor = pf.processing_label("<html><b>Main actors:</b> " + moviee.getMainActors() + "</html>", 10, 300, 800, 30);
         main_actor.setFont(new Font("Arial", Font.PLAIN, 14));
         main_actor.setForeground(Color.LIGHT_GRAY);
 

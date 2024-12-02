@@ -1,5 +1,5 @@
 
-package com.mycompany.movie;
+package com.mycompany.model;
 
 public class Feedback {
     private String user;
@@ -20,21 +20,20 @@ public class Feedback {
         this.status = status;
     }
 
-    // Getters and setters
-    public String getUser() {
-        return user;
+    public void setMovie(String movie) {
+        this.movie = movie;
     }
 
     public void setUser(String user) {
         this.user = user;
     }
 
-    public String getMovie() {
-        return movie;
+    public String getUser() {
+        return user;
     }
 
-    public void setMovie(String movie) {
-        this.movie = movie;
+    public String getMovie() {
+        return movie;
     }
 
     public String getFeedback() {

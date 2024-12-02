@@ -1,6 +1,9 @@
 
 package com.mycompany.UI;
-import com.mycompany.movie.*;
+import com.mycompany.model.VIPTicket;
+import com.mycompany.model.Movie;
+import com.mycompany.model.TicketPrice;
+import com.mycompany.model.RegularTicket;
 import com.mycompany.database.*;
 
 import java.awt.*;

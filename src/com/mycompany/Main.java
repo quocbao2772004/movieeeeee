@@ -1,7 +1,6 @@
 
 package com.mycompany;
 import com.mycompany.UI.*;
-import com.mycompany.movie.*;
 import com.mycompany.database.*;
 import java.io.IOException;
 import com.mycompany.UI.process_functions.*;

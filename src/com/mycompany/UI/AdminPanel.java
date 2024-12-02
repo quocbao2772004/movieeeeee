@@ -1,6 +1,9 @@
 package com.mycompany.UI;
+import com.mycompany.model.Transaction;
+import com.mycompany.model.Cinema;
+import com.mycompany.model.Movie;
+import com.mycompany.model.Feedback;
 import com.mycompany.database.*;
-import com.mycompany.movie.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
