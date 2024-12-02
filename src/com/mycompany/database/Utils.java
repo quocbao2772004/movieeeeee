@@ -150,60 +150,70 @@ public class Utils {
         return false;
     }
     public String chat(String userInput) {
-    try {
-        // URL API
-        URL url = new URL("http://oop.dinhmanhhung.net/suggest-movie");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("accept", "application/json");
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setDoOutput(true);
+        try {
+            // URL API
+            URL url = new URL("http://oop.dinhmanhhung.net/suggest-movie");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
 
-        // Dữ liệu POST
-        String jsonInput = String.format("""
-            {
-                "user_input": "%s"
+            // Dữ liệu POST
+            String jsonInput = String.format("""
+                {
+                    "user_input": "%s"
+                }
+            """, userInput);
+
+            // Gửi yêu cầu
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonInput.getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
-        """, userInput);
 
-        // Gửi yêu cầu
-        try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = jsonInput.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
+            // Kiểm tra mã phản hồi
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Đọc phản hồi với InputStreamReader để xử lý UTF-8
+                InputStreamReader reader = new InputStreamReader(connection.getInputStream(), "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    response.append(line);
+                }
+                bufferedReader.close();
+                connection.disconnect();
 
-        // Kiểm tra mã phản hồi
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            // Đọc phản hồi với InputStreamReader để xử lý UTF-8
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream(), "UTF-8");
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                response.append(line);
-            }
-            bufferedReader.close();
-            connection.disconnect();
-
-            // Trả về suggested_feedback
-            String responseString = response.toString();
-            if (responseString.contains("\"suggested_feedback\":\"")) {
-                return responseString.split("\"suggested_feedback\":\"")[1].split("\"")[0];
+                // Trả về suggested_feedback
+                String responseString = response.toString();
+                if (responseString.contains("\"suggested_feedback\":\"")) {
+                    String x = "";
+                    for(int i= 23;i<=responseString.length()-3;i++)
+                    {
+                        if(responseString.charAt(i)!= '\\')
+                        {
+                              x = x +responseString.charAt(i);
+                    }
+                    }
+                    
+                    return x;
+//                    return responseString.split("\"suggested_feedback\":\"")[1].split("\"")[0];
+                } else {
+                    System.err.println("Error: suggested_feedback not found in the response");
+                }
             } else {
-                System.err.println("Error: suggested_feedback not found in the response");
+                System.err.println("Error: HTTP response code " + responseCode);
             }
-        } else {
-            System.err.println("Error: HTTP response code " + responseCode);
-        }
 
-        connection.disconnect();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "Có lỗi xảy ra khi xử lý yêu cầu.";
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Có lỗi xảy ra khi xử lý yêu cầu.";
+        }
+        return null;
     }
-    return null;
-}
 
     public String classifyFeedback(String feedback) {
         try {
